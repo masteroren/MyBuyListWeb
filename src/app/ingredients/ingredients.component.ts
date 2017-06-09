@@ -14,11 +14,11 @@ export class IngredientsComponent implements OnInit {
 
   ingredients: IIngredient[] = [];
   ingredient: IIngredient = {
-    quantity: '',
+    quantity: 1,
+    measureUnit: 0,
+    fraction: 0,
     name: '',
-    measureUnit: '',
-    fraction: null,
-    handling: ''
+    text: ''
   };
   fractions: ILabelValue[] = [];
   measureUnits: ILabelValue[] = [];
@@ -28,22 +28,28 @@ export class IngredientsComponent implements OnInit {
 
   constructor(private httpService: HttpService, private fb: FormBuilder) {
     this.form = fb.group({
-      quantity: ['', Validators.required],
-      name: ['', Validators.required],
+      quantity: [1, Validators.required],
       measureUnit: ['', Validators.required],
       fraction: '',
-      handling: ''
+      name: ['', Validators.required],
+      text: ''
     })
   }
 
   ngOnInit() {
     this.httpService.get('api/recipes/fractions')
-      .subscribe(data => {
+      .subscribe((data: ILabelValue[]) => {
         this.fractions = data;
+        this.ingredient.fraction = data[0].value;
+        this.ingredient.fractionText = data[0].label;
       });
 
     this.httpService.get('api/recipes/measure-units')
-      .subscribe(data => this.measureUnits = data);
+      .subscribe(data => {
+        this.measureUnits = data;
+        this.ingredient.measureUnit = data[0].value;
+        this.ingredient.measureUnitText = data[0].label;
+      });
   }
 
   search(event) {
@@ -54,17 +60,36 @@ export class IngredientsComponent implements OnInit {
   }
 
   add() {
+    if (this.form.valid) {
+      this.ingredients = [...this.ingredients, {
+        quantity: this.ingredient.quantity,
+        fraction: this.ingredient.fraction,
+        fractionText: this.fractions.find(item => item.value == this.ingredient.fraction).label,
+        measureUnit: this.ingredient.measureUnit,
+        measureUnitText: this.measureUnits.find(item => item.value == this.ingredient.measureUnit).label,
+        name: this.ingredient.name,
+        text: this.ingredient.text
+      }];
 
-    if (!this.form.valid) {
-      console.log('Not valid');
-      return;
+      this.ingredient = {
+        quantity: 1,
+        measureUnit: 0,
+        fraction: 0,
+        name: '',
+        text: ''
+      };
     }
-
-    this.ingredients = [...this.ingredients, this.form.value];
   }
 
-  update(index: number) {
-    this.ingredient = this.ingredients[index];
+  update(item: IIngredient) {
+    console.log(item)
+    this.ingredient = {
+      quantity: item.quantity,
+      fraction: item.fraction,
+      measureUnit: item.measureUnit,
+      name: item.name,
+      text: item.text
+    };
   }
 
   remove(index: number) {

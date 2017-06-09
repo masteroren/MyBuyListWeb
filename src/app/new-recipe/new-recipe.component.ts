@@ -29,7 +29,7 @@ export class NewRecipeComponent implements OnInit {
     }
   ];
   categories: TreeNode[] = [];
-  flatCategories: string[] = [];
+  flatCategories: string;
 
   @ViewChild('categoriesInput') categoriesInput: ElementRef;
 
@@ -83,22 +83,25 @@ export class NewRecipeComponent implements OnInit {
   }
 
   setSelectedNodes() {
-    this.flatCategories = [];
-    this.setFlatCategories(this.categories);
-    this.categoriesInput.nativeElement.value = this.flatCategories.join();
+    let flatCategories: string[] = [];
+    this.setFlatCategories(flatCategories, this.categories);
+    console.log(flatCategories);
+    this.categoriesInput.nativeElement.value = flatCategories.join();
     this.display = false;
   }
 
-  private setFlatCategories(categories: TreeNode[]) {
+  private setFlatCategories(flatCategories: string[], categories: TreeNode[]) {
+
     categories.forEach((item: TreeNode) => {
       if (!isNullOrUndefined(item.partialSelected)) {
         if (item.partialSelected == true) {
-          this.setFlatCategories(item.children)
+          this.setFlatCategories(flatCategories, item.children)
         } else {
-          this.flatCategories = [...this.flatCategories, item.label];
+          flatCategories = [...flatCategories, item.label];
         }
       }
     });
+
   }
 
   private addChildrenTo(treeNode: TreeNode, categories: ICategory[]) {

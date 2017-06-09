@@ -1,7 +1,9 @@
 export interface IIngredient {
-  quantity: string;
-  fraction: string;
-  measureUnit: string;
+  quantity: number;
+  fraction: number;
+  fractionText?: string;
+  measureUnit: number;
+  measureUnitText?: string;
   name: string;
-  handling?: string;
+  text?: string;
 }

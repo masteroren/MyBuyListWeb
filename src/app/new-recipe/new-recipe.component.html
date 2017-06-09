@@ -20,7 +20,7 @@
           </label>
           <label>
             <div>{{'RECIPE_CATEGORY' | translate}}<span style="color: red; margin-right: 5px">*</span></div>
-            <input #categoriesInput class="w300" formControlName="category" pInputText (click)="display = true">
+            <input #categoriesInput class="w300" formControlName="category" [(ngModel)]="flatCategories" pInputText (click)="display = true">
           </label>
           <label>
             <div>{{'RECIPE_TAGS' | translate}}</div>
