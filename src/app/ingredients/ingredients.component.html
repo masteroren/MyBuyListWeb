@@ -1,0 +1,41 @@
+<div class="ingredients w100p">
+  <div class="section-title">{{'INGREDIENTS' | translate}}</div>
+  <form [formGroup]="form" class="flex flex-start">
+    <label>
+      <div>{{'QUANTITY' | translate}}</div>
+      <input type="number" class="w50" pInputText formControlName="quantity">
+    </label>
+    <label class="fraction-measure">
+      <div>{{'AND' | translate}}</div>
+      <p-dropdown [options]="fractions" formControlName="name"></p-dropdown>
+    </label>
+    <label class="">
+      <div>{{'MEASURE_UNITS' | translate}}</div>
+      <p-dropdown class="w150" [options]="measureUnits" [autoWidth]="false"
+                  formControlName="measureUnit"></p-dropdown>
+    </label>
+    <label>
+      <div>{{'INGREDIENT_NAME' | translate}}</div>
+      <p-autoComplete [inputStyleClass]="input-style" [suggestions]="results"
+                      (completeMethod)="search($event)" formControlName="name"></p-autoComplete>
+    </label>
+    <label>
+      <div>{{'INGREDIENT_HANDLING' | translate}}</div>
+      <input pInputText formControlName="handling">
+    </label>
+    <label>
+      <button pButton label="{{'ADD' | translate}}"
+              (click)="add()"></button>
+    </label>
+  </form>
+  <div>
+    <div>{{'INGREDIENT_ADDED' | translate}}</div>
+    <div class="w100p h150" pInputTextarea>
+      <div *ngFor="let ingredient of ingredients; let index = i">
+        <a (click)="update(index)">{{'UPDATE' | translate}}</a>
+        <a (click)="remove(index)">{{'REMOVE' | translate}}</a>
+        {{ingredient.fraction.label}}{{ingredient.quantity}} {{ingredient.measureUnit.label}} {{ingredient.name}}
+      </div>
+    </div>
+  </div>
+</div>

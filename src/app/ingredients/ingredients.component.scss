@@ -1,0 +1,17 @@
+@import "../../colors";
+
+input {
+  background-color: $green;
+  border-color: $dark-green;
+}
+
+.ingredients {
+
+  label {
+    margin-right: 20px;
+
+    button{
+      height: 100%;
+    }
+  }
+}

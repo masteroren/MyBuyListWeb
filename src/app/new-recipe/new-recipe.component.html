@@ -1,0 +1,109 @@
+<div class="flex flex-justify-center">
+  <form [formGroup]="form" class="w90p">
+    <div class="general-details">
+      <div class="flex flex-space-between">
+        <div class="section-title">{{'GENERAL_DETAILS' | translate}}</div>
+        <div>
+          <p-checkbox #shareRecipe label="{{'SHARE_RECIPE' | translate}}" binary="true"></p-checkbox>
+        </div>
+      </div>
+
+      <div class="flex flex-space-between">
+        <div style="width: 40%">
+          <label>
+            <div>{{'RECIPE_NAME' | translate}}<span style="color: red; margin-right: 5px">*</span></div>
+            <input class="w300" formControlName="name" pInputText>
+          </label>
+          <label>
+            <div>{{'RECIPE_DESCRIPTION' | translate}}</div>
+            <textarea class="w300 h100" formControlName="description" pInputTextarea></textarea>
+          </label>
+          <label>
+            <div>{{'RECIPE_CATEGORY' | translate}}<span style="color: red; margin-right: 5px">*</span></div>
+            <input #categoriesInput class="w300" formControlName="category" pInputText (click)="display = true">
+          </label>
+          <label>
+            <div>{{'RECIPE_TAGS' | translate}}</div>
+            <input class="w300" formControlName="tags" pInputText>
+          </label>
+          <label>
+            <div>{{'PHOTO' | translate}}</div>
+            <input class="w300" type="file" formControlName="photo" pInputText>
+          </label>
+        </div>
+        <div style="width: 290px">
+          <label>
+            <div>{{'PREPARE_TIME' | translate}}</div>
+            <div class="flex flex-space-between">
+              <input type="number" formControlName="prepareFor" pInputText>
+              <p-dropdown [options]="timeUnits" [(ngModel)]="prepareUnit" formControlName="prepareUnit"></p-dropdown>
+            </div>
+          </label>
+          <label>
+            <div>{{'COOK_TIME' | translate}}</div>
+            <div class="flex flex-space-between">
+              <input type="number" formControlName="cookFor" pInputText>
+              <p-dropdown [options]="timeUnits" [(ngModel)]="cookUnit" formControlName="cookUnit"></p-dropdown>
+            </div>
+          </label>
+          <label>
+            <div>{{'SERVING' | translate}}</div>
+            <input type="number" formControlName="servings" pInputText>
+          </label>
+          <label>
+            <div>{{'LEVEL' | translate}}</div>
+            <input formControlName="level" pInputText>
+          </label>
+        </div>
+      </div>
+    </div>
+    <div class="share-video">
+      <label>
+        <div>{{'LINK_TO_YOUTUBE' | translate}}</div>
+        <textarea class="w100p" formControlName="link" pInputTextarea></textarea>
+      </label>
+    </div>
+
+    <ingredients></ingredients>
+
+    <div>
+      <label>
+        <div class="section-title">{{'TOOLS' | translate}}</div>
+        <textarea class="w100p" formControlName="tools" pInputTextarea></textarea>
+      </label>
+    </div>
+
+    <div>
+      <label>
+        <div class="section-title">{{'INSTRUCTIONS' | translate}}<span style="color: red; margin-right: 5px">*</span>
+        </div>
+        <textarea class="w100p h150" formControlName="instructions" pInputTextarea></textarea>
+      </label>
+    </div>
+
+    <div>
+      <label>
+        <div class="section-title">{{'COMMENTS' | translate}}</div>
+        <textarea class="w100p" formControlName="comments" pInputTextarea></textarea>
+      </label>
+    </div>
+
+    <div style="text-align: left">
+      <button pButton (click)="submit()" label="{{'SAVE' | translate}}"></button>
+      <button pButton label="{{'CANCEL' | translate}}"></button>
+    </div>
+
+  </form>
+
+
+  <p-dialog header="{{'CATEGORIES_DIALOG_TITLE' | translate}}" [(visible)]="display" modal="modal" [width]="500"
+            [resizable]="false">
+    <div style="overflow: auto; height: 400px; margin: 10px">
+      <p-tree [value]="categories" selectionMode="checkbox" (onNodeUnselect)="nodeUnSelect($event)"></p-tree>
+    </div>
+    <p-footer>
+      <button pButton label="{{'CLOSE' | translate}}" (click)="display = false"></button>
+      <button pButton label="{{'SELECT' | translate}}" (click)="setSelectedNodes()"></button>
+    </p-footer>
+  </p-dialog>
+</div>

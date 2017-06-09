@@ -1,0 +1,36 @@
+@import "../../colors";
+
+input {
+  background-color: $green;
+  border-color: $dark-green;
+}
+
+textarea {
+  background-color: $green;
+  border-color: $dark-green;
+}
+
+p-dropdown {
+  background-color: $green;
+  border-color: $dark-green;
+
+  div {
+
+    &.ui-dropdown {
+      width: 150px !important;
+    }
+
+  }
+}
+
+p-autoComplete {
+  input {
+    background-color: $green !important;
+    border-color: $dark-green;
+  }
+}
+
+.input-style {
+  background-color: $green;
+  border-color: $dark-green;
+}

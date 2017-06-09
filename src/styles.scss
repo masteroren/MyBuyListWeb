@@ -1,0 +1,72 @@
+@import "colors";
+
+body {
+  direction: rtl;
+}
+
+.flex {
+  display: flex;
+}
+
+.flex-justify-center {
+  justify-content: center;
+}
+
+.flex-space-between {
+  justify-content: space-between;
+}
+
+.flex-start {
+  justify-content: flex-start;
+}
+
+.w100p {
+  width: 100%;
+}
+
+.w90p {
+  width: 90%;
+}
+
+.w50 {
+  width: 50px;
+}
+
+.w150 {
+  width: 150px;
+}
+
+.w300 {
+  width: 300px;
+}
+
+.h100 {
+  height: 100px;
+}
+
+.h150 {
+  height: 150px;
+}
+
+.section-title {
+  color: $dark-green;
+  font-size: 26px;
+  font-weight: bold;
+}
+
+input {
+  outline: none;
+}
+
+.ui-autocomplete-panel .ui-autocomplete-list-item {
+  text-align: right;
+}
+
+p-tree {
+  ul {
+    margin-right: 20px !important;
+    .fa-fw {
+      width: 16px !important;
+    }
+  }
+}
