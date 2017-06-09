@@ -3,6 +3,7 @@ import {IIngredient} from "../shared/interfaces/ingredient";
 import {HttpService} from "../shared/services/http-service.service";
 import {ILabelValue} from "../shared/interfaces/labelValue";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {isNullOrUndefined} from "util";
 
 @Component({
   selector: 'ingredients',
@@ -23,6 +24,7 @@ export class IngredientsComponent implements OnInit {
   fractions: ILabelValue[] = [];
   measureUnits: ILabelValue[] = [];
   results: any[] = [];
+  isNew: boolean = true;
 
   form: FormGroup;
 
@@ -61,6 +63,12 @@ export class IngredientsComponent implements OnInit {
 
   add() {
     if (this.form.valid) {
+      let index = this.ingredients.findIndex(item => item.name === this.ingredient.name);
+
+      if (index !== -1){
+        this.removeIngredient(index);
+      }
+
       this.ingredients = [...this.ingredients, {
         quantity: this.ingredient.quantity,
         fraction: this.ingredient.fraction,
@@ -71,18 +79,17 @@ export class IngredientsComponent implements OnInit {
         text: this.ingredient.text
       }];
 
-      this.ingredient = {
-        quantity: 1,
-        measureUnit: 0,
-        fraction: 0,
-        name: '',
-        text: ''
-      };
+      // this.ingredient = {
+      //   quantity: 1,
+      //   measureUnit: 0,
+      //   fraction: 0,
+      //   name: '',
+      //   text: ''
+      // };
     }
   }
 
-  update(item: IIngredient) {
-    console.log(item)
+  updateIngredient(item: IIngredient) {
     this.ingredient = {
       quantity: item.quantity,
       fraction: item.fraction,
@@ -92,7 +99,7 @@ export class IngredientsComponent implements OnInit {
     };
   }
 
-  remove(index: number) {
+  removeIngredient(index: number) {
     this.ingredients.splice(index, 1);
   }
 

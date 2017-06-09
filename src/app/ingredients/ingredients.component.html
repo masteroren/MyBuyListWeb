@@ -24,16 +24,17 @@
       <input pInputText formControlName="text" [(ngModel)]="ingredient.text">
     </label>
     <label>
-      <button pButton label="{{'ADD' | translate}}"
+      <button pButton label="{{'UPDATE' | translate}}"
               (click)="add()"></button>
     </label>
   </form>
+
   <div>
     <div>{{'INGREDIENT_ADDED' | translate}}</div>
     <div class="w100p h150" pInputTextarea>
       <div *ngFor="let ingredient of ingredients; let index = i">
-        <a (click)="update(ingredient)">{{'UPDATE' | translate}}</a>
-        <a (click)="remove(ingredient)">{{'REMOVE' | translate}}</a>
+        <a (click)="updateIngredient(ingredient)">{{'UPDATE' | translate}}</a>
+        <a (click)="removeIngredient(index)">{{'REMOVE' | translate}}</a>
         {{ingredient.fractionText}}{{ingredient.quantity}} {{ingredient.measureUnitText}} {{ingredient.name}}
       </div>
     </div>
