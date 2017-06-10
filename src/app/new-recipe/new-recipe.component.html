@@ -4,7 +4,7 @@
       <div class="flex flex-space-between">
         <div class="section-title">{{'GENERAL_DETAILS' | translate}}</div>
         <div>
-          <p-checkbox #shareRecipe label="{{'SHARE_RECIPE' | translate}}" binary="true"></p-checkbox>
+          <p-checkbox #shareRecipe label="{{'SHARE_RECIPE' | translate}}" binary="true" formControlName="shared"></p-checkbox>
         </div>
       </div>
 
@@ -20,7 +20,7 @@
           </label>
           <label>
             <div>{{'RECIPE_CATEGORY' | translate}}<span style="color: red; margin-right: 5px">*</span></div>
-            <input #categoriesInput class="w300" formControlName="category" [(ngModel)]="flatCategories" pInputText (click)="display = true">
+            <input #categoriesInput class="w300" formControlName="categories" [(ngModel)]="flatCategories" pInputText (click)="display = true">
           </label>
           <label>
             <div>{{'RECIPE_TAGS' | translate}}</div>
@@ -64,7 +64,7 @@
       </label>
     </div>
 
-    <ingredients></ingredients>
+    <ingredients formControlName="ingredients"></ingredients>
 
     <div>
       <label>

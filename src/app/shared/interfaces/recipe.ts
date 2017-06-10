@@ -1,3 +1,4 @@
+import {IIngredient} from "./ingredient";
 export interface IRecipe {
   name: string;
   description: string;
@@ -14,4 +15,6 @@ export interface IRecipe {
   tools: string;
   instructions: string;
   comments: string;
+  isNew: boolean;
+  ingredients: IIngredient[]
 }

@@ -5,6 +5,8 @@ import {HttpService} from "../shared/services/http-service.service";
 import {ICategory} from "../shared/interfaces/category";
 import {TreeNode} from "primeng/primeng";
 import {isNullOrUndefined} from "util";
+import {IRecipe} from "../shared/interfaces/recipe";
+import {IIngredient} from "../shared/interfaces/ingredient";
 
 @Component({
   selector: 'new-recipe',
@@ -31,14 +33,13 @@ export class NewRecipeComponent implements OnInit {
   categories: TreeNode[] = [];
   flatCategories: string;
 
-  @ViewChild('categoriesInput') categoriesInput: ElementRef;
-
   constructor(private fb: FormBuilder, private recipeService: RecipeService, private httpService: HttpService) {
     this.form = fb.group({
+      shared: false,
       name: ['', Validators.required],
       description: '',
-      category: ['', Validators.required],
-      tags: [],
+      categories: ['', Validators.required],
+      tags: '',
       photo: '',
       link: '',
       prepareFor: '',
@@ -49,11 +50,16 @@ export class NewRecipeComponent implements OnInit {
       level: '',
       tools: '',
       instructions: ['', Validators.required],
-      comments: ''
+      comments: '',
+      ingredients: []
     });
   }
 
   ngOnInit() {
+    this.getCategories();
+  }
+
+  getCategories(){
     this.httpService.get('api/recipes/categories').subscribe((categories: ICategory[]) => {
       categories.forEach(item => {
         if (!item.parentId) {
@@ -71,11 +77,11 @@ export class NewRecipeComponent implements OnInit {
 
   submit() {
     console.log(this.form.value);
-    if (this.form.valid) {
-      this.recipeService.addRecipe(this.form.value);
-    } else {
-      console.log('form no valid');
-    }
+    // if (this.form.valid) {
+    //   this.recipeService.addRecipe(this.form.value);
+    // } else {
+    //   console.log('form no valid');
+    // }
   }
 
   nodeUnSelect (e) {
@@ -85,8 +91,6 @@ export class NewRecipeComponent implements OnInit {
   setSelectedNodes() {
     let flatCategories: string[] = [];
     this.setFlatCategories(flatCategories, this.categories);
-    console.log(flatCategories);
-    this.categoriesInput.nativeElement.value = flatCategories.join();
     this.display = false;
   }
 
@@ -98,6 +102,7 @@ export class NewRecipeComponent implements OnInit {
           this.setFlatCategories(flatCategories, item.children)
         } else {
           flatCategories = [...flatCategories, item.label];
+          this.flatCategories = flatCategories.join();
         }
       }
     });

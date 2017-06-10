@@ -3,25 +3,26 @@
   <form [formGroup]="form" class="flex flex-start">
     <label>
       <div>{{'QUANTITY' | translate}}</div>
-      <input type="number" class="w50" pInputText formControlName="quantity" [(ngModel)]="ingredient.quantity">
+      <input type="number" class="w50" pInputText formControlName="quantity" [(ngModel)]="ingredientModel.quantity">
     </label>
     <label class="fraction-measure">
       <div>{{'AND' | translate}}</div>
-      <p-dropdown [options]="fractions" [(ngModel)]="ingredient.fraction" formControlName="fraction"></p-dropdown>
+      <p-dropdown [options]="fractions" formControlName="fraction" [(ngModel)]="ingredientModel.fraction"></p-dropdown>
     </label>
     <label class="">
       <div>{{'MEASURE_UNITS' | translate}}</div>
-      <p-dropdown class="w150" [options]="measureUnits" [autoWidth]="false" [(ngModel)]="ingredient.measureUnit"
-                  formControlName="measureUnit"></p-dropdown>
+      <p-dropdown class="w150" [options]="measureUnits" [autoWidth]="false"
+                  formControlName="measureUnit" [(ngModel)]="ingredientModel.measureUnit"></p-dropdown>
     </label>
     <label>
       <div>{{'INGREDIENT_NAME' | translate}}</div>
-      <p-autoComplete [inputStyleClass]="input-style" [suggestions]="results" [(ngModel)]="ingredient.name"
-                      (completeMethod)="search($event)" formControlName="name"></p-autoComplete>
+      <p-autoComplete [inputStyleClass]="input-style" [suggestions]="results"
+                      (completeMethod)="search($event)" formControlName="name"
+                      [(ngModel)]="ingredientModel.name"></p-autoComplete>
     </label>
     <label>
       <div>{{'INGREDIENT_HANDLING' | translate}}</div>
-      <input pInputText formControlName="text" [(ngModel)]="ingredient.text">
+      <input pInputText formControlName="text" [(ngModel)]="ingredientModel.text">
     </label>
     <label>
       <button pButton label="{{'UPDATE' | translate}}"

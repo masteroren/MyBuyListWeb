@@ -1,32 +1,52 @@
-import {Component, OnInit, ViewEncapsulation} from '@angular/core';
+import {Component, forwardRef, Input, OnInit, ViewEncapsulation} from '@angular/core';
 import {IIngredient} from "../shared/interfaces/ingredient";
 import {HttpService} from "../shared/services/http-service.service";
 import {ILabelValue} from "../shared/interfaces/labelValue";
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {ControlValueAccessor, FormBuilder, FormGroup, NG_VALUE_ACCESSOR, Validators} from "@angular/forms";
 import {isNullOrUndefined} from "util";
 
 @Component({
   selector: 'ingredients',
   templateUrl: './ingredients.component.html',
-  styleUrls: ['./ingredients.component.scss']
+  styleUrls: ['./ingredients.component.scss'],
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => IngredientsComponent),
+      multi: true
+    }
+  ]
 })
 
 export class IngredientsComponent implements OnInit {
 
-  ingredients: IIngredient[] = [];
-  ingredient: IIngredient = {
+  ingredientModel: IIngredient = {
     quantity: 1,
     measureUnit: 0,
     fraction: 0,
     name: '',
     text: ''
   };
+
+  _ingredients: IIngredient[] = [];
+  @Input('ingredients')
+  set ingredients(value: IIngredient[]) {
+    this._ingredients = value;
+    this.propagateChange(value);
+  }
+
+  get ingredients() {
+    return this._ingredients;
+  }
+
   fractions: ILabelValue[] = [];
   measureUnits: ILabelValue[] = [];
   results: any[] = [];
-  isNew: boolean = true;
 
   form: FormGroup;
+
+  propagateChange = (_: any) => {
+  };
 
   constructor(private httpService: HttpService, private fb: FormBuilder) {
     this.form = fb.group({
@@ -42,16 +62,29 @@ export class IngredientsComponent implements OnInit {
     this.httpService.get('api/recipes/fractions')
       .subscribe((data: ILabelValue[]) => {
         this.fractions = data;
-        this.ingredient.fraction = data[0].value;
-        this.ingredient.fractionText = data[0].label;
+        this.ingredientModel.fraction = data[0].value;
+        this.ingredientModel.fractionText = data[0].label;
       });
 
     this.httpService.get('api/recipes/measure-units')
       .subscribe(data => {
         this.measureUnits = data;
-        this.ingredient.measureUnit = data[0].value;
-        this.ingredient.measureUnitText = data[0].label;
+        this.ingredientModel.measureUnit = data[0].value;
+        this.ingredientModel.measureUnitText = data[0].label;
       });
+  }
+
+  writeValue(value: any) {
+    if (!isNullOrUndefined(value)) {
+      this._ingredients = value;
+    }
+  }
+
+  registerOnChange(fn) {
+    this.propagateChange = fn;
+  }
+
+  registerOnTouched() {
   }
 
   search(event) {
@@ -63,20 +96,20 @@ export class IngredientsComponent implements OnInit {
 
   add() {
     if (this.form.valid) {
-      let index = this.ingredients.findIndex(item => item.name === this.ingredient.name);
+      let index = this.ingredients.findIndex(item => item.name === this.ingredientModel.name);
 
-      if (index !== -1){
+      if (index !== -1) {
         this.removeIngredient(index);
       }
 
       this.ingredients = [...this.ingredients, {
-        quantity: this.ingredient.quantity,
-        fraction: this.ingredient.fraction,
-        fractionText: this.fractions.find(item => item.value == this.ingredient.fraction).label,
-        measureUnit: this.ingredient.measureUnit,
-        measureUnitText: this.measureUnits.find(item => item.value == this.ingredient.measureUnit).label,
-        name: this.ingredient.name,
-        text: this.ingredient.text
+        quantity: this.ingredientModel.quantity,
+        fraction: this.ingredientModel.fraction,
+        fractionText: this.fractions.find(item => item.value == this.ingredientModel.fraction).label,
+        measureUnit: this.ingredientModel.measureUnit,
+        measureUnitText: this.measureUnits.find(item => item.value == this.ingredientModel.measureUnit).label,
+        name: this.ingredientModel.name,
+        text: this.ingredientModel.text
       }];
 
       // this.ingredient = {
@@ -90,7 +123,7 @@ export class IngredientsComponent implements OnInit {
   }
 
   updateIngredient(item: IIngredient) {
-    this.ingredient = {
+    this.ingredientModel = {
       quantity: item.quantity,
       fraction: item.fraction,
       measureUnit: item.measureUnit,
